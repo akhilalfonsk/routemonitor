@@ -2,7 +2,7 @@ package com.causefinder.routemonitor.controller;
 
 import com.causefinder.routemonitor.client.RealTimeDataSoapClient;
 import com.causefinder.routemonitor.client.StopDataByRouteAndDirectionSoapClient;
-import com.causefinder.routemonitor.scheduling.FlushRouteStatusUpdates;
+import com.causefinder.routemonitor.scheduling.RouteStatusUpdatesCollectionScheduler;
 import com.causefinder.routemonitor.service.PathFinderService;
 import com.causefinder.routemonitor.soap.model.StopData;
 import com.causefinder.routemonitor.soap.model.StopEvent;
@@ -29,7 +29,7 @@ public class ScheduleCreatorController {
     PathFinderService pathFinderService;
 
     @Autowired
-    FlushRouteStatusUpdates flushRouteStatusUpdates;
+    RouteStatusUpdatesCollectionScheduler routeStatusUpdatesCollectionScheduler;
 
 
     @RequestMapping(value = "/realtime", method = RequestMethod.GET)
@@ -49,6 +49,6 @@ public class ScheduleCreatorController {
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
     public List<StopEvent> viewStopEvents() {
-        return flushRouteStatusUpdates.viewStopEvents();
+        return routeStatusUpdatesCollectionScheduler.viewStopEvents();
     }
 }

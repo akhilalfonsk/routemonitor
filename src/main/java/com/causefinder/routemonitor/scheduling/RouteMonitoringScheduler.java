@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
-public class RouteMonitor {
+public class RouteMonitoringScheduler {
     public static final int MONITOR_FREQUENCY_IN_MIN = 1;
     private static String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 

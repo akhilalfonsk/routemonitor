@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class FlushRouteStatusUpdates {
+public class RouteStatusUpdatesCollectionScheduler {
     public static final int DATA_FLUSH_FREQUENCY_IN_MIN = 1;
     public static final int DATA_FLUSH_THRESHOLD = 100;
     private LinkedList<Map<Stops, List<StopData>>> bufferForRouteStatusUpdates = new LinkedList<>();
