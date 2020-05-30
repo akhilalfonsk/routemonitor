@@ -24,9 +24,9 @@ public class SwaggerConfig {
     }
 
     private ApiInfo scheduleCreatorApiDocumentation() {
-        return new ApiInfo("ScheduleCreator Backend API",
-                "ScheduleCreator Backend API",
-                "1.0-beta",
+        return new ApiInfo("RouterMonitor Scheduler API",
+                "RouterMonitor Scheduler API",
+                "1.0",
                 "Terms and Conditions **",
                 new Contact("Akhil Alfons K", "http://akhilizer.com", "akhil@akhilizer.com"),
                 "MIT License",
