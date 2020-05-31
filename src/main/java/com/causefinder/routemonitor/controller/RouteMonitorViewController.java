@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/routemonitor")
-public class ScheduleCreatorController {
+public class RouteMonitorViewController {
 
     @Autowired
     RealTimeDataSoapClient realTimeDataSoapClient;
