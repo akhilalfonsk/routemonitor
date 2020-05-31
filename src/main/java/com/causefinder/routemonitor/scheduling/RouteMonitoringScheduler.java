@@ -13,11 +13,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.IntStream;
 
 @Component
 @Slf4j
 public class RouteMonitoringScheduler {
-    public static final int MONITOR_FREQUENCY_IN_MIN = 1;
+    public static final int MONITOR_ALLOTTED_TIME_PER_SYNC_SEC=15;
+    public static final int PARALLEL_MONITOR_ROUTE_GROUP_SIZE = 2;
     private static String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
     @Autowired
@@ -25,24 +28,37 @@ public class RouteMonitoringScheduler {
     @Value("${routemonitor.routes}")
     private List<String> monitoredRoutesIdList;
 
-    private List<Pair<String, String>> monitoredRoutes = new ArrayList<>();
+    private AtomicLong syncCounter=new AtomicLong(0);
     private Map<Pair, Map<Stops, List<StopData>>> previousRouteStatus = new HashMap<>();
 
-    @Scheduled(initialDelay = MONITOR_FREQUENCY_IN_MIN * 10000, fixedRate = MONITOR_FREQUENCY_IN_MIN * 60000)
+    @Scheduled(initialDelay = 30000, fixedRate = MONITOR_ALLOTTED_TIME_PER_SYNC_SEC*1000)
     public void syncMonitorRouteInbound() {
-
         StopWatch watch = new StopWatch();
         watch.start();
-        if (monitoredRoutes.isEmpty()) {
-            monitoredRoutesIdList.stream().forEach(route -> {
-                monitoredRoutes.add(Pair.with(route, "I"));
-                monitoredRoutes.add(Pair.with(route, "O"));
-            });
-        }
-        log.info("Status monitoring of routes {} started", monitoredRoutesIdList);
-        monitoredRoutes.parallelStream().forEach(this::updateRouteStatusSaveDelta);
+        List<Pair<String, String>> currMonitoredRoutes =getRoutesToBeMonitored();
+        log.info("Status monitoring of routes {} started", currMonitoredRoutes);
+        currMonitoredRoutes.parallelStream().forEach(this::updateRouteStatusSaveDelta);
         watch.stop();
-        log.info("Status monitoring of routes {} completed successfully.Time Taken:{}s", monitoredRoutesIdList, watch.getTime(TimeUnit.SECONDS));
+        log.info("Status monitoring of routes {} completed successfully.Time Taken:{}s", currMonitoredRoutes, watch.getTime(TimeUnit.SECONDS));
+    }
+
+    private List<Pair<String, String>> getRoutesToBeMonitored() {
+        List<Pair<String, String>> currMonitoredRoutes = new ArrayList<>();
+        int groupCount=monitoredRoutesIdList.size()/PARALLEL_MONITOR_ROUTE_GROUP_SIZE;
+        if(monitoredRoutesIdList.size()%PARALLEL_MONITOR_ROUTE_GROUP_SIZE!=0){
+            groupCount++;
+        }
+        int groupId=(int)syncCounter.getAndIncrement()%groupCount;
+        int startItem=groupId*PARALLEL_MONITOR_ROUTE_GROUP_SIZE;
+        int endItem=startItem+PARALLEL_MONITOR_ROUTE_GROUP_SIZE;
+        if(endItem>monitoredRoutesIdList.size()){
+            endItem=monitoredRoutesIdList.size();
+        }
+        monitoredRoutesIdList.subList(startItem,endItem).stream().forEach(route -> {
+            currMonitoredRoutes.add(Pair.with(route, "I"));
+            currMonitoredRoutes.add(Pair.with(route, "O"));
+        });
+        return currMonitoredRoutes;
     }
 
     private void updateRouteStatusSaveDelta(Pair<String, String> monitoredRoute) {
