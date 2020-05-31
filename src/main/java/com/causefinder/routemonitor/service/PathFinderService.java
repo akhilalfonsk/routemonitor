@@ -2,7 +2,7 @@ package com.causefinder.routemonitor.service;
 
 import com.causefinder.routemonitor.client.RealTimeDataSoapClient;
 import com.causefinder.routemonitor.client.StopDataByRouteAndDirectionSoapClient;
-import com.causefinder.routemonitor.scheduling.RouteStatusUpdatesCollectionScheduler;
+import com.causefinder.routemonitor.scheduling.StatusUpdatesCollectionScheduler;
 import com.causefinder.routemonitor.soap.model.StopData;
 import com.causefinder.routemonitor.soap.model.Stops;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class PathFinderService {
     StopDataByRouteAndDirectionSoapClient stopDataByRouteAndDirection;
 
     @Autowired
-    RouteStatusUpdatesCollectionScheduler routeStatusUpdatesCollectionScheduler;
+    StatusUpdatesCollectionScheduler statusUpdatesCollectionScheduler;
 
     public List<StopData> getJourneyProgressReport(String route, String direction, Integer journeyRef) {
         List<Stops> routeBusStops = stopDataByRouteAndDirection.getStopDataByRouteAndDirection(route, direction);
@@ -61,7 +61,7 @@ public class PathFinderService {
     }
 
     public void poolDeltaStatus(Map<Stops, List<StopData>> deltaStatus) {
-        routeStatusUpdatesCollectionScheduler.addDeltaStatusToBuffer(deltaStatus);
+        statusUpdatesCollectionScheduler.addDeltaStatusToBuffer(deltaStatus);
     }
 
 }

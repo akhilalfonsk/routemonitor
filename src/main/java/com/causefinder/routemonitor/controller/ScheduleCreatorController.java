@@ -2,7 +2,7 @@ package com.causefinder.routemonitor.controller;
 
 import com.causefinder.routemonitor.client.RealTimeDataSoapClient;
 import com.causefinder.routemonitor.client.StopDataByRouteAndDirectionSoapClient;
-import com.causefinder.routemonitor.scheduling.RouteStatusUpdatesCollectionScheduler;
+import com.causefinder.routemonitor.scheduling.StatusUpdatesCollectionScheduler;
 import com.causefinder.routemonitor.service.PathFinderService;
 import com.causefinder.routemonitor.soap.model.StopData;
 import com.causefinder.routemonitor.soap.model.StopEvent;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/schedule")
+@RequestMapping("/api/routemonitor")
 public class ScheduleCreatorController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class ScheduleCreatorController {
     PathFinderService pathFinderService;
 
     @Autowired
-    RouteStatusUpdatesCollectionScheduler routeStatusUpdatesCollectionScheduler;
+    StatusUpdatesCollectionScheduler statusUpdatesCollectionScheduler;
 
 
     @RequestMapping(value = "/realtime", method = RequestMethod.GET)
@@ -47,8 +47,8 @@ public class ScheduleCreatorController {
         return pathFinderService.getJourneyProgressReport(route, direction, journeyRef);
     }
 
-    @RequestMapping(value = "/events", method = RequestMethod.GET)
-    public List<StopEvent> viewStopEvents() {
-        return routeStatusUpdatesCollectionScheduler.viewStopEvents();
+    @RequestMapping(value = "/bufferedevents", method = RequestMethod.GET)
+    public List<StopEvent> viewBufferedEvents() {
+        return statusUpdatesCollectionScheduler.viewStopEvents();
     }
 }

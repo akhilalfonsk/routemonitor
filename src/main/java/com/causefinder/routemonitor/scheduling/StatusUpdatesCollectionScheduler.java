@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class RouteStatusUpdatesCollectionScheduler {
+public class StatusUpdatesCollectionScheduler {
     public static final int DATA_FLUSH_FREQUENCY_IN_MIN = 1;
     public static final int DATA_FLUSH_THRESHOLD = 100;
     private LinkedList<Map<Stops, List<StopData>>> bufferForRouteStatusUpdates = new LinkedList<>();
@@ -32,7 +32,7 @@ public class RouteStatusUpdatesCollectionScheduler {
     BigQueryClient bigQueryClient;
 
     @Scheduled(initialDelay = DATA_FLUSH_FREQUENCY_IN_MIN * 30000, fixedRate = DATA_FLUSH_FREQUENCY_IN_MIN * 60000)
-    public void syncMonitorRouteInbound() {
+    public void moniorRoutes() {
         log.info("Flushing/Buffering of route updates started");
         StopWatch watch = new StopWatch();
         watch.start();
@@ -59,7 +59,7 @@ public class RouteStatusUpdatesCollectionScheduler {
     }
 
     @PreDestroy
-    private void flushData() {
+    private void flushBufferBeforeShutdown() {
         List<Map<Stops, List<StopData>>> recentRouteStatusUpdates;
         synchronized (bufferForRouteStatusUpdates) {
             recentRouteStatusUpdates = (List<Map<Stops, List<StopData>>>) bufferForRouteStatusUpdates.clone();
