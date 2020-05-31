@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StatusUpdatesCollectionScheduler {
     public static final int DATA_FLUSH_FREQUENCY_IN_MIN = 1;
-    public static final int DATA_FLUSH_THRESHOLD = 100;
+    public static final int DATA_FLUSH_THRESHOLD = 250;
     private LinkedList<Map<Stops, List<StopData>>> bufferForRouteStatusUpdates = new LinkedList<>();
     private List<StopEvent> stopEventsBuffer=new ArrayList<>();
     private ModelMapper modelMapper = new ModelMapper();
