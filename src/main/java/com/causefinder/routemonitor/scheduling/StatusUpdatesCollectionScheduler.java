@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StatusUpdatesCollectionScheduler {
     public static final int DATA_FLUSH_FREQUENCY_IN_MIN = 1;
-    public static final int DATA_FLUSH_THRESHOLD = 250;
+    public static final int DATA_FLUSH_THRESHOLD = 500;
     private LinkedList<Map<Stops, List<StopData>>> bufferForRouteStatusUpdates = new LinkedList<>();
     private List<StopEvent> stopEventsBuffer=new ArrayList<>();
     private ModelMapper modelMapper = new ModelMapper();
@@ -38,7 +38,7 @@ public class StatusUpdatesCollectionScheduler {
         watch.start();
         int recordsPushedToGCP=0;
         int recordsPushedToBuffer=0;
-        List<Map<Stops, List<StopData>>> recentRouteStatusUpdates;
+        List<Map<Stops, List<StopData>>> recentRouteStatusUpdates=null;
         synchronized (bufferForRouteStatusUpdates) {
             recentRouteStatusUpdates = (List<Map<Stops, List<StopData>>>) bufferForRouteStatusUpdates.clone();
             bufferForRouteStatusUpdates.clear();
