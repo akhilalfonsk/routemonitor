@@ -30,6 +30,6 @@ public class StopEvent {
     private String location;
     private String address;
 
-    private String lineNote;
+ //   private String lineNote;
     private Date recordedAtTime;
 }

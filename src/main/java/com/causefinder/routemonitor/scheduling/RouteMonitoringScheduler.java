@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public class RouteMonitoringScheduler {
     public static final int MONITOR_ALLOTTED_TIME_PER_SYNC_SEC=15;
-    public static final int PARALLEL_MONITOR_ROUTE_GROUP_SIZE = 2;
+    public static final int PARALLEL_MONITOR_ROUTE_GROUP_SIZE = 4;
     private static String TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
     @Autowired
