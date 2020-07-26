@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class ScheduleCreatorApplication {
+public class RouteMonitorApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ScheduleCreatorApplication.class, args);
+        SpringApplication.run(RouteMonitorApplication.class, args);
     }
 
 }
